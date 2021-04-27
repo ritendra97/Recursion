@@ -1,0 +1,75 @@
+//Jump Game-3
+
+import java.util.*;
+public class Solution {
+
+    public static boolean canReachUtil(int index, int[] arr, int start) {
+        
+        if(start>= arr.length || start<0 || arr[start]<0){
+            
+            return false;
+        }
+        if(arr[start]==0)
+            return true;
+        
+        arr[start] = -arr[start];
+        return canReachUtil(start+arr[start],arr,start+arr[start]) || canReachUtil(start+arr[start],arr,start-arr[start]);
+        
+    }
+    public static boolean canReach(int[] arr, int start) {
+        
+    	return canReachUtil(0,arr,start);
+    }
+	public static void main(String[] args) {
+	
+		int arr[] = {3,0,2,1,2};
+		int start = 2;
+		System.out.println(canReach(arr,start));
+	}
+
+}
+// BFS Solution
+
+class Solution {
+    public boolean canReach(int[] arr, int start) {
+        int n = arr.length;
+        boolean[] visited = new boolean[n];
+        Queue<Integer> q = new ArrayDeque<>();
+        q.add(start);
+        while (!q.isEmpty()) {
+            int position = q.remove();
+            if (position < 0 || position >= n || visited[position]) {
+                continue;
+            }
+            if (arr[position] == 0) {
+                return true;
+            }
+            
+            visited[position] = true;
+            q.add(position - arr[position]);
+            q.add(position + arr[position]);
+        }
+        return false;
+    }
+}
+
+// DFS Solution
+class Solution {
+    boolean[] visited;
+    public boolean canReach(int[] arr, int start) {
+        visited = new boolean[arr.length];
+        return dfs(arr,start);
+    }
+    
+    public boolean dfs(int[] arr, int start){
+        if(start < 0 || start > arr.length - 1)
+            return false;
+        if(arr[start] == 0)
+            return true;
+        if(!visited[start]){
+            visited[start] = true;
+            return dfs(arr, start + arr[start]) || dfs(arr, start - arr[start]);
+        }
+        return false;
+    }
+}
